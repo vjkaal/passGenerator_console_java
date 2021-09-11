@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 
 public class password1 {
 
-	private final char[] array = {'~', '`', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_','+', '=', '{', '}', '[', ']', '\\', '|', ';', ':', '\'', '"', ',', '<', '>', '.', '/', '?', ' '};
+	private final String str = "~`!@#$%^&*()-_+={}[]|;:',<>./? \"\\";
 
 	public password1(){}
 
@@ -30,7 +30,7 @@ public class password1 {
 
 
 //				DO NOT REMOVE THIS
-//				This is to remove trailing space from br.read in line 28
+//				This is to remove trailing space from br.read in above line
 				br.readLine();
 
 			}
@@ -82,10 +82,8 @@ public class password1 {
 		try {
 			if( Character.toLowerCase((char) br.read())  == 'y'){
 
-
-
 //				DO NOT REMOVE THIS
-//				This is to remove trailing space from br.read in line 86
+//				This is to remove trailing space from br.read in above
 				br.readLine();
 
 
@@ -94,7 +92,6 @@ public class password1 {
 //				pw.println(len);
 			}
 			else len = 15;
-//			pw.println("length: "+len);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -102,31 +99,19 @@ public class password1 {
 		return len;
 	}
 
-//	make a function to generate password using given values
-
+//	function to generate password using given requirements
 	private void generatePassword(String req, int len){
 
 		PrintWriter pw = new PrintWriter(System.out,true);
 
-//		pw.println("Vanshaj kaushal");
 		char[] pass1 = new char[len];
-//		pw.println(req);
-//		pw.println(len);
 
 		for(int i=0;i<len; i++){
-			switch (req.charAt((int) (Math.random() * req.length()))){
-
-				case 'c' : pass1[i] = (char) ((int) (Math.random() * 26) + 97);
-					break;
-
-				case 'C': pass1[i] = (char) ((int) (Math.random() * 26) + 65);
-					break;
-
-				case 'n': pass1[i] = (char) ((int) (Math.random() * 10) + 48);
-					break;
-
-				case 's': pass1[i] = array[(int) (Math.random() * array.length)];
-					break;
+			switch (req.charAt((int) (Math.random() * req.length()))) {
+				case 'c' -> pass1[i] = (char) ((int) (Math.random() * 26) + 97);
+				case 'C' -> pass1[i] = (char) ((int) (Math.random() * 26) + 65);
+				case 'n' -> pass1[i] = (char) ((int) (Math.random() * 10) + 48);
+				case 's' -> pass1[i] = str.charAt((int) (Math.random() * str.length()));
 			}
 		}
 
@@ -139,6 +124,75 @@ public class password1 {
 
 		PrintWriter pw = new PrintWriter(System.out,true);
 
-		pw.println("Feature under development\nPlease chk in later");
+		String pass = getPassword();
+
+		//password length here
+		if(pass.length() >= 8) {
+			pw.println("Password length: Okay");
+		}
+		else pw.println("Password length GREATER THAN 8 is recommended");
+
+		boolean eol = false;
+		boolean sl = false, cl = false, num = false, sc = false;
+		int i=0;
+		while(!eol){
+			pw.printf("%c",pass.charAt(i));
+
+			if((int) pass.charAt(i) >= 97 && (int) pass.charAt(i) <= (97+26)) sl = true;
+			if((int) pass.charAt(i) >= 65 && (int) pass.charAt(i) <= (65+26)) cl = true;
+			if((int) pass.charAt(i) >= 48 && (int) pass.charAt(i) <= (48+10)) num = true;
+			if(contains(pass.charAt(i))) sc = true;
+
+
+			i++;
+			if(i == pass.length()) eol = true;
+		}
+
+
+		if(sl) pw.println("\n\nat least 1 Small Letter: Okay");
+		else pw.println("at least 1 Small Letter: Recommended");
+
+		if(cl) pw.println("at least 1 Capital Letter: Okay");
+		else pw.println("at least 1 Capital Letter: Recommended");
+
+		if(num) pw.println("at least 1 Numeric: Okay");
+		else pw.println("at least 1 Numeric: Recommended");
+
+		if(sc) pw.println("at least 1 Special Character: Okay");
+		else pw.println("at least 1 Special Character: Recommended");
+
 	}
+
+
+	private String getPassword(){
+		PrintWriter pw = new PrintWriter(System.out,true);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+
+		pw.printf("Enter your password: ");
+		String pass = "";
+		try {
+			pass = br.readLine();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+
+		return pass;
+	}
+
+
+	private boolean contains(char c){
+
+		int i=0;
+
+		while(true){
+
+			if(str.charAt(i) == c) return true;
+
+			i++;
+			if(i == str.length()) return false;
+		}
+	}
+
 }
